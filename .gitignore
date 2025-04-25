@@ -1,2 +1,2 @@
 media/*
-rental/settings.py
+./rental/settings.py
