@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'django_filters',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -98,8 +99,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'rental',
-        'USER': 'root',
-        'PASSWORD': 'Love1234Angel',
+        'USER': '<your name here>',
+        'PASSWORD': '<your password here>',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }

@@ -1,0 +1,619 @@
+openapi: 3.0.3
+info:
+  title: Rent Me API
+  version: 1.0.0
+paths:
+  /api/v1/amenities/:
+    get:
+      operationId: amenities_list
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/amenities/{id}/:
+    get:
+      operationId: amenities_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/auth/login/:
+    post:
+      operationId: auth_login_create
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/auth/registration/:
+    post:
+      operationId: auth_registration_create
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            - application/json 
+  /api/v1/auth/registration/verify-email/:
+    post:
+      operationId: auth_registration_verify_email_create
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/auth/user/:
+    get:
+      operationId: auth_user_retrieve
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    put:
+      operationId: auth_user_update
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    patch:
+      operationId: auth_user_partial_update
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/districts/:
+    get:
+      operationId: districts_list
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/districts/{id}/:
+    get:
+      operationId: districts_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/leases/:
+    get:
+      operationId: leases_list
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    post:
+      operationId: leases_create
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            - application/json 
+  /api/v1/leases/{id}/:
+    get:
+      operationId: leases_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    put:
+      operationId: leases_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    patch:
+      operationId: leases_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    delete:
+      operationId: leases_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '204': {} 
+  /api/v1/leases/{id}/approve/:
+    post:
+      operationId: leases_approve_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/leases/{id}/complete/:
+    post:
+      operationId: leases_complete_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/leases/{id}/reject/:
+    post:
+      operationId: leases_reject_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/properties/:
+    get:
+      operationId: properties_list
+      parameters:
+      - in: query
+        name: bedrooms
+        schema:
+          type: integer
+      - in: query
+        name: is_furnished
+        schema:
+          type: boolean
+      - in: query
+        name: max_price
+        schema:
+          type: number
+      - in: query
+        name: min_price
+        schema:
+          type: number
+      - in: query
+        name: parking_type
+        schema:
+          type: string
+      - in: query
+        name: property_type
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        schema:
+          type: string
+      - in: query
+        name: township
+        schema:
+          type: string
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+    post:
+      operationId: properties_create
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            - application/json 
+  /api/v1/properties/{id}/:
+    get:
+      operationId: properties_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+    put:
+      operationId: properties_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    patch:
+      operationId: properties_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    delete:
+      operationId: properties_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '204': {} 
+  /api/v1/properties/{property_pk}/images/:
+    get:
+      operationId: properties_images_list
+      parameters:
+      - in: path
+        name: property_pk
+        schema:
+          type: string
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+    post:
+      operationId: properties_images_create
+      parameters:
+      - in: path
+        name: property_pk
+        schema:
+          type: string
+        required: true
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            - application/json 
+  /api/v1/property-types/:
+    get:
+      operationId: property_types_list
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/property-types/{id}/:
+    get:
+      operationId: property_types_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/regions/:
+    get:
+      operationId: regions_list
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/regions/{id}/:
+    get:
+      operationId: regions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/townships/:
+    get:
+      operationId: townships_list
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/townships/{id}/:
+    get:
+      operationId: townships_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/users/me/:
+    get:
+      operationId: users_me_retrieve
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    put:
+      operationId: users_me_update
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    patch:
+      operationId: users_me_partial_update
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+  /api/v1/users/me/profile/:
+    get:
+      operationId: users_me_profile_retrieve
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    put:
+      operationId: users_me_profile_update
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+    patch:
+      operationId: users_me_profile_partial_update
+      requestBody:
+        content:
+          - application/json 
+          - application/x-www-form-urlencoded 
+          - multipart/form-data 
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            - application/json 
+
+
+
+
+
+
