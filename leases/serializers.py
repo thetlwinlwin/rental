@@ -1,24 +1,24 @@
 from properties.models import Property
 from rest_framework import serializers
-from users.serializers import UserSerializer
+from users.serializers import SimpleUserSerializer, UserSerializer
 
 from .models import Lease, Review
 
 
 class SimplePropertySerializer(serializers.ModelSerializer):
-     class Meta:
+    class Meta:
         model = Property
         fields = ['id', 'title', 'address_line_1', 'township',] 
         depth = 1 
 
 class LeaseSerializer(serializers.ModelSerializer): 
     property_details = SimplePropertySerializer(source='property', read_only=True) 
-    tenant_details = UserSerializer(source='tenant', read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     property = serializers.PrimaryKeyRelatedField(
         queryset=Property.objects.all(), 
         write_only=True 
     )
+    counterparty_details = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = Lease
@@ -27,7 +27,7 @@ class LeaseSerializer(serializers.ModelSerializer):
             'property', 
             'property_details', 
             'tenant', 
-            'tenant_details', 
+            'counterparty_details',
             'start_date',
             'end_date',
             'status', 
@@ -41,8 +41,26 @@ class LeaseSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = [
             'id', 'tenant', 'status', 'created_at', 'updated_at',
-            'property_details', 'tenant_details', 'status_display',
+            'property_details', 'counterparty_details', 'status_display',
+            'monthly_rent_at_signing'
         ]
+    def get_counterparty_details(self, obj): 
+        request = self.context.get('request')
+        if not request or not hasattr(request, 'user') or not request.user.is_authenticated:
+            return None
+        current_user = request.user
+        lease = obj 
+        if not lease.tenant or not lease.property or not lease.property.owner:
+             return None 
+        if current_user == lease.tenant:
+            serializer = SimpleUserSerializer(lease.property.owner, context=self.context)
+            return serializer.data
+        elif current_user == lease.property.owner:
+            serializer = SimpleUserSerializer(lease.tenant, context=self.context)
+            return serializer.data
+        else:
+            return None
+
 
     
     

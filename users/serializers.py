@@ -17,6 +17,20 @@ class ProfileSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['user', 'is_verified_landlord']
 
+class SimpleProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            'phone_number','role','address'
+        ]
+        read_only_fields = ['user', 'is_verified_landlord']
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+    profile = SimpleProfileSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = [ 'username','first_name','last_name','profile' ] 
+        depth = 1 
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(read_only=True)
@@ -28,7 +42,6 @@ class UserSerializer(serializers.ModelSerializer):
             'profile', 
             'is_active', 'date_joined'
         ]
-        
         read_only_fields = ['is_active', 'date_joined', 'profile']
 
 
