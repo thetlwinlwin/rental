@@ -63,15 +63,55 @@ class LeaseViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], permission_classes=[IsPropertyOwner], url_path='approve')
     def approve_lease(self, request, pk=None):
-        """ Landlord approves a PENDING lease request. """
-        lease = self.get_object() 
-        if lease.status != Lease.LeaseStatus.PENDING:
+        """ Landlord approves a PENDING lease request, checking for overlaps. """
+        lease_to_approve = self.get_object()
+
+        if lease_to_approve.status != LeaseStatus.PENDING:
             return Response({'detail': 'Lease is not in Pending state.'}, status=status.HTTP_400_BAD_REQUEST)
-        lease.status = Lease.LeaseStatus.ACTIVE
-        lease.save()
-        lease.property.availability_status = Property.AvailabilityStatus.RENTED
-        lease.property.save()
-        serializer = self.get_serializer(lease)
+
+        property_instance = lease_to_approve.property
+        start_date = lease_to_approve.start_date
+        end_date = lease_to_approve.end_date
+
+        overlapping_active_leases = Lease.objects.filter(
+            property=property_instance,
+            status=Lease.LeaseStatus.ACTIVE, 
+            start_date__lte=end_date,  
+            end_date__gte=start_date    
+        ).exclude(pk=lease_to_approve.pk) 
+
+        if overlapping_active_leases.exists():
+            conflict_details = ", ".join([f"Lease ID {l.id} ({l.start_date} to {l.end_date})" for l in overlapping_active_leases])
+            error_msg = f"Cannot approve lease. It overlaps with existing active lease(s): {conflict_details}."
+            return Response({'detail': error_msg}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            with transaction.atomic():
+                lease_to_approve.status = LeaseStatus.ACTIVE
+                lease_to_approve.save()
+
+                if property_instance.availability_status != AvailabilityStatus.RENTED:
+                    property_instance.availability_status = AvailabilityStatus.RENTED
+                    property_instance.save()
+                else:
+                    print(f"Warning: Property {property_instance.id} was already marked as RENTED when approving Lease {lease_to_approve.id}")
+
+
+                overlapping_pending_leases = Lease.objects.filter(
+                    property=property_instance,
+                    status=LeaseStatus.PENDING,
+                    start_date__lte=end_date,
+                    end_date__gte=start_date
+                ).exclude(pk=lease_to_approve.pk)
+                for other_lease in overlapping_pending_leases:
+                    other_lease.status = LeaseStatus.REJECTED
+                    other_lease.save()
+        
+
+        except Exception as e:
+             self.stderr.write(self.style.ERROR(f"Error during lease approval transaction: {e}"))
+             return Response({'detail': 'An internal error occurred during approval.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        serializer = self.get_serializer(lease_to_approve)
         return Response(serializer.data)
 
 
